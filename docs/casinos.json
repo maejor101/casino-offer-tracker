@@ -1,0 +1,31 @@
+{
+  "scraped_at": "2026-10-13T00:47:07+00:00",
+  "source": "https://www.gambling.com/uk/online-casinos/bonus",
+  "model": "openai/gpt-oss-120b",
+  "casinos": [
+    {
+      "name": "Mr Vegas",
+      "welcome_bonus": "100% up to £50 + 11 Free Spins",
+      "wagering_multiplier": 10,
+      "min_deposit": "£10",
+      "source_url": "https://www.gambling.com/uk/online-casinos/bonus",
+      "needs_review": false
+    },
+    {
+      "name": "Casumo",
+      "welcome_bonus": "50% Welcome Bonus up to £100",
+      "wagering_multiplier": 10,
+      "min_deposit": "£20",
+      "source_url": "https://www.gambling.com/uk/online-casinos/bonus",
+      "needs_review": false
+    },
+    {
+      "name": "Videoslots",
+      "welcome_bonus": "100% Welcome Bonus up to £50 + 11 Free Spins",
+      "wagering_multiplier": 10,
+      "min_deposit": "£10",
+      "source_url": "https://www.gambling.com/uk/online-casinos/bonus",
+      "needs_review": false
+    }
+  ]
+}

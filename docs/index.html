@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Casino welcome bonuses</title>
+<style>
+  :root { color-scheme: light dark; --b: #8884; }
+  body { font: 16px/1.5 system-ui, sans-serif; max-width: 860px; margin: 0 auto; padding: 1rem; }
+  h1 { font-size: 1.4rem; }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { text-align: left; padding: .6rem .5rem; border-bottom: 1px solid var(--b); vertical-align: top; }
+  .meta { font-size: .85rem; opacity: .75; }
+  .flag { font-size: .8rem; color: #b45309; }
+  @media (max-width: 600px) {
+    thead { display: none; }
+    table { table-layout: fixed; }
+    tr { display: block; border: 1px solid var(--b); border-radius: 8px; margin-bottom: .8rem; padding: .4rem; max-width: 100%; }
+    td { display: flex; justify-content: space-between; align-items: flex-start; gap: .75rem; border: 0; padding: .3rem .4rem; max-width: 100%; }
+    td::before { content: attr(data-label); font-weight: 600; flex: 0 0 42%; }
+    td > span, td > a { flex: 1 1 0; min-width: 0; overflow-wrap: anywhere; text-align: right; }
+  }
+</style>
+</head>
+<body>
+<h1>Casino welcome bonuses</h1>
+<p class="meta" id="meta">Loading…</p>
+<table>
+  <thead><tr><th>Casino</th><th>Welcome bonus</th><th>Wagering</th><th>Min. deposit</th><th>Source</th></tr></thead>
+  <tbody id="rows"></tbody>
+</table>
+<p class="meta">18+. Data extracted automatically; always check the operator's T&amp;Cs.</p>
+<script>
+(async () => {
+  const meta = document.getElementById('meta');
+  const rows = document.getElementById('rows');
+  try {
+    const res = await fetch('casinos.json', { cache: 'no-store' });
+    if (!res.ok) throw new Error(res.status);
+    const data = await res.json();
+    meta.textContent = 'Last updated ' + new Date(data.scraped_at).toLocaleString();
+    for (const c of data.casinos) {
+      const tr = document.createElement('tr');
+      const cell = (label, text) => {
+        const td = document.createElement('td');
+        td.dataset.label = label;
+        if (text) {
+          const span = document.createElement('span');
+          span.textContent = text;
+          td.appendChild(span);
+        }
+        tr.appendChild(td);
+        return td;
+      };
+      cell('Casino', c.name);
+      cell('Welcome bonus', c.welcome_bonus);
+      const w = cell('Wagering', c.wagering_multiplier == null ? 'n/a' : (c.wagering_multiplier === 0 ? 'None' : c.wagering_multiplier + 'x'));
+      if (c.needs_review) { const f = document.createElement('span'); f.className = 'flag'; f.textContent = ' ⚠ unverified'; w.appendChild(f); }
+      cell('Min. deposit', c.min_deposit ?? 'n/a');
+      const td = cell('Source', '');
+      if (/^https?:\/\//.test(c.source_url)) {
+        const a = document.createElement('a');
+        a.href = c.source_url; a.textContent = new URL(c.source_url).hostname;
+        a.rel = 'noopener'; td.appendChild(a);
+      }
+      rows.appendChild(tr);
+    }
+  } catch (e) {
+    meta.textContent = 'Could not load data (' + e.message + ').';
+  }
+})();
+</script>
+</body>
+</html>
